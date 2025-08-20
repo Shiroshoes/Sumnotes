@@ -56,8 +56,7 @@ class Calcul(App):
         self.label.text = ""
 
     def backspace(self, instance):
-        self.label.text = self.label.text[:-1]  # remove last character
-
+        self.label.text = self.label.text[:-1]
 
 if __name__ == '__main__':
     Calcul().run()
