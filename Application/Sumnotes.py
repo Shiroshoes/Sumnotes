@@ -53,9 +53,15 @@ class MainSumNotesApp(MDApp):
             print("Summarizer disabled")
 
     def toggle_new_note_form(self):
-        """Show/Hide the floating new note form"""
         form = self.root.ids.new_note_form
-        form.opacity = 1 if form.opacity == 0 else 0
+        if form.opacity == 0:
+            form.opacity = 1
+            form.disabled = False
+        else:
+            form.opacity = 0
+            form.disabled = True
+
+            
 
 class UpperLayout(BoxLayout):
     pass
