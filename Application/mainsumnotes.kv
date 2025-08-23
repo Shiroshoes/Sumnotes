@@ -208,148 +208,144 @@ MainForm:
 <MainForm>:
     MDBoxLayout:
         orientation: "vertical"
-        padding: dp(10), 0, dp(10), 0
-        spacing: dp(10)
-
+                
         AnchorLayout:
             anchor_x: "center"
             anchor_y: "top"
             size_hint_y: None
             height: dp(70)
-            
-            UpperLayout:
-    
-        #Line divider
-        Widget:
-            size_hint_y: None
-            height: dp(2)
-            canvas.before:
-                Color:
-                    rgb: 0, 0, 0
-                Line:
-                    points: self.x, self.center_y, self.right, self.center_y
-                    width: 2
-        
-        # ----------------- Pinned Notes -----------------
-        MDLabel:
-            text: "Pinned Notes"
-            halign: "left"
-            font_style: "H6"
-            size_hint_y: None
-            height: dp(40)
-
-        MDScrollView:
-            size_hint_y: None
-            height: dp(250)
-
-            MDGridLayout:
-                cols: 2
-                spacing: dp(10)
-                adaptive_height: True
-
-                # Example Card (Clickable)
-                MDCard:
-                    orientation: "vertical"
-                    size_hint: None, None
-                    size: dp(170), dp(200)
-                    padding: dp(10)
-                    radius: [15, 15, 15, 15]
-                    md_bg_color: .85, .85, .85, 1
-                    on_release: app.show_note_detail("Pinned Note Example")
-
-                    MDBoxLayout:
-                        orientation: "horizontal"
-                        size_hint_y: None
-                        height: dp(30)
-
-                        MDLabel:
-                            text: "Notes Title"
-                            bold: True
-                            font_style: "Subtitle1"
-                            halign: "left"
-
-                        MDIconButton:
-                            icon: "delete"
-                            theme_icon_color: "Custom"
-                            icon_color: 1, 0, 0, 1
-                            size_hint_x: None
-                            width: dp(40)
-                            opacity: 0   # hidden until toggle
-                            on_release: app.delete_note("Pinned Note Example")
-
-                    MDLabel:
-                        text: "Notes inputted where the user input their notes"
-                        halign: "left"
-                        theme_text_color: "Secondary"
                     
-                    Widget:
+            UpperLayout:
 
         # Divider Line
         MDBoxLayout:
             size_hint_y: None
             height: dp(2)
             md_bg_color: 0, 0, 0, 1
+            width: dp(2)
 
-        # ----------------- Notes -----------------
-        MDLabel:
-            text: "Notes"
-            halign: "left"
-            font_style: "H6"
-            size_hint_y: None
-            height: dp(40)
-
+        # ------------ Single Scroll for All Notes ------------
         MDScrollView:
-            MDGridLayout:
-                cols: 2
+            MDBoxLayout:
+                orientation: "vertical"
                 spacing: dp(10)
+                padding: dp(10)
                 adaptive_height: True
 
-                MDCard:
-                    orientation: "vertical"
-                    size_hint: None, None
-                    size: dp(170), dp(200)
-                    padding: dp(10)
-                    radius: [15, 15, 15, 15]
-                    md_bg_color: .85, .85, .85, 1
-                    on_release: app.show_note_detail("Normal Note Example")
+                # --------- Pinned Notes ---------
+                MDLabel:
+                    text: "Pinned Notes"
+                    halign: "left"
+                    font_style: "H6"
+                    size_hint_y: None
+                    height: dp(40)
 
-                    MDBoxLayout:
-                        orientation: "horizontal"
-                        size_hint_y: None
-                        height: dp(30)
+                MDGridLayout:
+                    cols: 2
+                    spacing: dp(10)
+                    adaptive_height: True
+
+                    # Example Pinned Note
+                    MDCard:
+                        orientation: "vertical"
+                        size_hint: None, None
+                        size: dp(170), dp(200)
+                        padding: dp(10)
+                        radius: [15, 15, 15, 15]
+                        md_bg_color: .85, .85, .85, 1
+                        on_release: app.show_note_detail("Pinned Note Example")
+
+                        MDBoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(30)
+
+                            MDLabel:
+                                text: "Notes Title"
+                                bold: True
+                                font_style: "Subtitle1"
+                                halign: "left"
+
+                            MDIconButton:
+                                icon: "delete"
+                                theme_icon_color: "Custom"
+                                icon_color: 1, 0, 0, 1
+                                size_hint_x: None
+                                width: dp(40)
+                                opacity: 0
+                                on_release: app.delete_note("Pinned Note Example")
 
                         MDLabel:
-                            text: "Notes Title"
-                            bold: True
-                            font_style: "Subtitle1"
+                            text: "Notes inputted where the user input their notes"
                             halign: "left"
+                            theme_text_color: "Secondary"
 
-                        MDIconButton:
-                            icon: "delete"
-                            theme_icon_color: "Custom"
-                            icon_color: 1, 0, 0, 1
-                            size_hint_x: None
-                            width: dp(40)
-                            opacity: 0
-                            on_release: app.delete_note("Normal Note Example")
+                # Divider Line
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(2)
+                    md_bg_color: 0, 0, 0, 1
 
-                    MDLabel:
-                        text: "Notes inputted where the user input their notes"
-                        halign: "left"
-                        theme_text_color: "Secondary"
+                # --------- Normal Notes ---------
+                MDLabel:
+                    text: "Notes"
+                    halign: "left"
+                    font_style: "H6"
+                    size_hint_y: None
+                    height: dp(40)
+
+                MDGridLayout:
+                    cols: 2
+                    spacing: dp(10)
+                    adaptive_height: True
+
+                    MDCard:
+                        orientation: "vertical"
+                        size_hint: None, None
+                        size: dp(170), dp(200)
+                        padding: dp(10)
+                        radius: [15, 15, 15, 15]
+                        md_bg_color: .85, .85, .85, 1
+                        on_release: app.show_note_detail("Normal Note Example")
+
+                        MDBoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(30)
+
+                            MDLabel:
+                                text: "Notes Title"
+                                bold: True
+                                font_style: "Subtitle1"
+                                halign: "left"
+
+                            MDIconButton:
+                                icon: "delete"
+                                theme_icon_color: "Custom"
+                                icon_color: 1, 0, 0, 1
+                                size_hint_x: None
+                                width: dp(40)
+                                opacity: 0
+                                on_release: app.delete_note("Normal Note Example")
+
+                        MDLabel:
+                            text: "Notes inputted where the user input their notes"
+                            halign: "left"
+                            theme_text_color: "Secondary"
+                Widget:
 
         AnchorLayout:
             anchor_x: "right"
             anchor_y: "bottom"
             padding: dp(20)
 
+            # Floating + Button
             MDFloatingActionButton:
                 id: plus_btn
                 icon: "plus"
-                md_bg_color: 0.3, 0.5, 1, 1
-                elevation: 8
+                md_bg_color: 0, 0, 0, 1
+                pos_hint: {"center_x": .92, "center_y": .1}
                 on_release: app.toggle_new_note_form()
-
 
             # Hidden Floating Form
             MDCard:
@@ -373,7 +369,6 @@ MainForm:
                     text: "New Notes"
                     halign: "left"
                     bold: True
-
 
 
 

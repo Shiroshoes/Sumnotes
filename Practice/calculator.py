@@ -50,6 +50,12 @@ class Calcul(App):
                 self.label.text = "Error"
         else:
             self.label.text += instance.text
+            
+    def on_button_press(self, instance):
+        if instance.text == "=":
+            self.label.text = "miss kita"
+        else:
+            self.label.text += instance.text
 
     def clear_text(self, instance):
         self.label.text = ""
