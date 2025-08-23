@@ -1,0 +1,732 @@
+MainForm:
+
+
+<UpperLayout>
+    orientation: "horizontal"
+    padding: (10, 10, 10, 10)
+    spacing: dp(10)
+
+    #menu button
+    MDIconButton:
+        id: settings_bin
+        icon: "dots-horizontal"
+        icon_size: "25sp"
+        canvas.before:
+            Color:
+                rgb: 183/255, 183/255, 183/255
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [9, 9, 9, 9]
+
+    #search bar
+    MDTextField:
+        hint_text: "Search"
+        mode: "rectangle"
+        fill_color: 183/255, 183/255, 183/255, 1
+
+    #search button
+    MDIconButton:
+        icon: "magnify"
+
+    #logo
+    Image:
+        source: "sumnotes.png"
+        size_hint: None, None
+        size: dp(50), dp(50)
+
+
+
+<menuform>:
+    orientation: "vertical"
+    spacing: 0
+    padding: 0
+
+    # Top bar with dots
+    AnchorLayout:
+        id: top_bar
+        anchor_x: "right"
+        anchor_y: "top"
+        size_hint_y: None
+        height: dp(50)
+
+        MDIconButton:
+            id: settings_bin
+            icon: "dots-horizontal"
+            icon_size: "25sp"
+            size_hint: None, None
+            size: dp(50), dp(50)
+
+    # Divider line right below dots
+    Widget:
+        size_hint_y: None
+        height: dp(2)
+        canvas.before:
+            Color:
+                rgb: 0, 0, 0
+            Line:
+                points: self.x, self.center_y, self.right, self.center_y
+                width: 2
+
+
+    # List locked right below the line
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint_y: None
+        height: self.minimum_height
+        spacing: dp(5)
+
+        OneLineIconListItem:
+            text: "Notes"
+            IconLeftWidget:
+                icon: "notebook"
+
+        OneLineIconListItem:
+            text: "Delete"
+            IconLeftWidget:
+                icon: "delete"
+
+        OneLineIconListItem:
+            text: "Settings"
+            IconLeftWidget:
+                icon: "cog"
+
+    # Spacer to fill the rest of the phone
+    Widget:
+        size_hint_y: 1
+
+
+
+<Settingsform>:
+    orientation: "vertical"
+    spacing: 0
+    padding: 0
+
+    # Top-right cog button
+    AnchorLayout:
+        anchor_x: "right"
+        anchor_y: "top"
+        size_hint_y: None
+        height: dp(50)
+
+        MDIconButton:
+            icon: "cog"
+            icon_size: "25sp"
+            size_hint: None, None
+            size: dp(50), dp(50)
+
+    # Divider line right below the cog
+    Widget:
+        id: divider_line
+        size_hint_y: None
+        height: dp(2)
+        canvas.before:
+            Color:
+                rgba: root.line_color
+            Line:
+                points: self.x, self.center_y, self.right, self.center_y
+                width: 2
+
+    # Theme section title
+    MDLabel:
+        text: "Theme"
+        halign: "left"
+        bold: True
+        padding: dp(10), dp(10)
+        size_hint_y: None
+        height: dp(40)
+            
+    BoxLayout:
+        orientation: "horizontal"
+        padding: dp(20), 0
+        spacing: dp(10)
+        size_hint_y: None
+        height: dp(40)
+
+        Label:
+            id: theme_label
+            text: app.get_mode_text(theme_switch.active)
+            color: app.get_mode_color(theme_switch.active)
+            halign: "left"
+            valign: "middle"
+            text_size: None, None
+            size_hint_x: None
+            width: self.texture_size[0] + dp(10)
+            pos_hint: {"center_y": 0.75} 
+
+        MDSwitch:
+            id: theme_switch
+            size_hint_x: None
+            width: dp(60)
+            on_active: app.toggle_theme(self.active)
+
+    BoxLayout:
+        orientation: "horizontal"
+        padding: dp(20), dp(10)
+        spacing: dp(20)
+        size_hint_y: None
+        height: dp(50)
+
+        MDRaisedButton:
+            id: save_button
+            text: "Save"
+            disabled: True  # start disabled
+
+        MDFlatButton:
+            text: "Cancel"
+
+    #Summarizer switch
+    BoxLayout:
+        orientation: "horizontal"
+        padding: dp(20), 0
+        spacing: dp(10)
+        size_hint_y: None
+        height: dp(40)
+
+        Label:
+            id: summarizer_label
+            text: "Summarizer"
+            color: app.get_mode_color(theme_switch.active)
+            halign: "left"
+            valign: "middle"
+            size_hint_x: None
+            width: self.texture_size[0] + dp(10)
+            pos_hint: {"center_y": 0.75} 
+
+        MDSwitch:
+            id: summarizer_switch
+            size_hint_x: None
+            width: dp(60)
+            on_active: app.toggle_summarizer(self.active)
+
+    # Spacer to fill the rest of the phone
+    Widget:
+        size_hint_y: 1
+
+
+
+<MainForm>:
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: dp(10), 0, dp(10), 0
+        spacing: dp(10)
+
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "top"
+            size_hint_y: None
+            height: dp(70)
+            
+            UpperLayout:
+    
+        #Line divider
+        Widget:
+            size_hint_y: None
+            height: dp(2)
+            canvas.before:
+                Color:
+                    rgb: 0, 0, 0
+                Line:
+                    points: self.x, self.center_y, self.right, self.center_y
+                    width: 2
+        
+        # ----------------- Pinned Notes -----------------
+        MDLabel:
+            text: "Pinned Notes"
+            halign: "left"
+            font_style: "H6"
+            size_hint_y: None
+            height: dp(40)
+
+        MDScrollView:
+            size_hint_y: None
+            height: dp(250)
+
+            MDGridLayout:
+                cols: 2
+                spacing: dp(10)
+                adaptive_height: True
+
+                # Example Card (Clickable)
+                MDCard:
+                    orientation: "vertical"
+                    size_hint: None, None
+                    size: dp(170), dp(200)
+                    padding: dp(10)
+                    radius: [15, 15, 15, 15]
+                    md_bg_color: .85, .85, .85, 1
+                    on_release: app.show_note_detail("Pinned Note Example")
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: dp(30)
+
+                        MDLabel:
+                            text: "Notes Title"
+                            bold: True
+                            font_style: "Subtitle1"
+                            halign: "left"
+
+                        MDIconButton:
+                            icon: "delete"
+                            theme_icon_color: "Custom"
+                            icon_color: 1, 0, 0, 1
+                            size_hint_x: None
+                            width: dp(40)
+                            opacity: 0   # hidden until toggle
+                            on_release: app.delete_note("Pinned Note Example")
+
+                    MDLabel:
+                        text: "Notes inputted where the user input their notes"
+                        halign: "left"
+                        theme_text_color: "Secondary"
+                    
+                    Widget:
+
+        # Divider Line
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(2)
+            md_bg_color: 0, 0, 0, 1
+
+        # ----------------- Notes -----------------
+        MDLabel:
+            text: "Notes"
+            halign: "left"
+            font_style: "H6"
+            size_hint_y: None
+            height: dp(40)
+
+        MDScrollView:
+            MDGridLayout:
+                cols: 2
+                spacing: dp(10)
+                adaptive_height: True
+
+                MDCard:
+                    orientation: "vertical"
+                    size_hint: None, None
+                    size: dp(170), dp(200)
+                    padding: dp(10)
+                    radius: [15, 15, 15, 15]
+                    md_bg_color: .85, .85, .85, 1
+                    on_release: app.show_note_detail("Normal Note Example")
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: dp(30)
+
+                        MDLabel:
+                            text: "Notes Title"
+                            bold: True
+                            font_style: "Subtitle1"
+                            halign: "left"
+
+                        MDIconButton:
+                            icon: "delete"
+                            theme_icon_color: "Custom"
+                            icon_color: 1, 0, 0, 1
+                            size_hint_x: None
+                            width: dp(40)
+                            opacity: 0
+                            on_release: app.delete_note("Normal Note Example")
+
+                    MDLabel:
+                        text: "Notes inputted where the user input their notes"
+                        halign: "left"
+                        theme_text_color: "Secondary"
+
+        AnchorLayout:
+            anchor_x: "right"
+            anchor_y: "bottom"
+            padding: dp(20)
+
+            MDFloatingActionButton:
+                id: plus_btn
+                icon: "plus"
+                md_bg_color: 0.3, 0.5, 1, 1
+                elevation: 8
+                on_release: app.toggle_new_note_form()
+
+
+            # Hidden Floating Form
+            MDCard:
+                id: new_note_form
+                orientation: "horizontal"
+                size_hint: None, None
+                size: dp(160), dp(50)
+                radius: [20, 20, 20, 20]
+                md_bg_color: 1, 1, 1, 1
+                pos_hint: {"center_x": .72, "center_y": .13}
+                elevation: 5
+                opacity: 0
+                on_release: app.create_new_note()
+
+                MDIcon:
+                    icon: "notebook"
+                    size_hint_x: None
+                    width: dp(40)
+
+                MDLabel:
+                    text: "New Notes"
+                    halign: "left"
+                    bold: True
+
+
+
+
+<NoteForm>:
+    BoxLayout:
+        orientation: "vertical"
+        
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "top"
+            size_hint_y: None
+            height: dp(70)
+            
+            UpperLayout:
+
+        # Line divider
+        Widget:
+            size_hint_y: None
+            height: dp(2)
+            canvas.before:
+                Color:
+                    rgb: 0, 0, 0
+                Line:
+                    points: self.x, self.center_y, self.right, self.center_y
+                    width: 2
+
+        # Controls row 
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+
+            # Back button
+            MDIconButton:
+                icon: "chevron-left"
+                icon_size: "30sp"
+                theme_text_color: "Custom"
+                pos_hint: {"center_y": 0.5}  # aligns vertically
+                # text_color: app.get_icon_color(theme_switch.active)
+                # on_release: app.go_back()
+
+            Widget:  # pushes the right-side buttons
+
+            # Pin button
+            MDIconButton:
+                icon: "pin"
+                icon_size: "24sp"
+                pos_hint: {"center_y": 0.5}
+
+            # Summarize button
+            MDRaisedButton:
+                text: "Summarize"
+                size_hint_x: None
+                width: dp(120)
+                pos_hint: {"center_y": 0.5}
+                md_bg_color: 183/255, 183/255, 183/255, 1 
+                text_color: 0, 0, 0, 1
+        
+        # Input Notes
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(10)
+            spacing: dp(10)
+
+            MDTextField:
+                id: title_input
+                hint_text: "Notes Title"
+                font_style: "H6"  # makes it bold and larger
+                size_hint_y: None
+                height: dp(48)
+
+            MDTextField:
+                id: paragraph_input
+                hint_text: "Notes Paragraph"
+                mode: "rectangle"
+                multiline: True
+                size_hint_y: 1
+    
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(50)   # adjust according to your LowerLayout height
+
+            # Bottom divider line locked above LowerLayout
+            Widget:
+                size_hint_y: None
+                height: dp(2)
+                canvas.before:
+                    Color:
+                        rgb: 0, 0, 0
+                    Line:
+                        points: self.x, self.center_y, self.right, self.center_y
+                        width: 2
+
+            LowerLayout:
+                size_hint_y: None
+                height: dp(48)  # or whatever height your LowerLayout needs
+
+
+
+<DeleteNoteForm>:
+    BoxLayout:
+        orientation: "vertical"
+        
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "top"
+            size_hint_y: None
+            height: dp(70)
+            
+            UpperLayout:
+    
+        #Line divider
+        Widget:
+            size_hint_y: None
+            height: dp(2)
+            canvas.before:
+                Color:
+                    rgb: 0, 0, 0
+                Line:
+                    points: self.x, self.center_y, self.right, self.center_y
+                    width: 2
+
+        # pinned section
+        MDLabel:
+            text: "Deleted Notes"
+            halign: "left"
+            bold: True
+            padding: dp(10), dp(10)
+            size_hint_y: None
+            height: dp(40)
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: self.minimum_height   # auto-fit all children
+            padding: dp(10)
+            spacing: dp(5)
+
+            OneLineIconListItem:
+                text: "Deleted Notes"
+                IconLeftWidget:
+                    icon: "notebook"
+
+            OneLineIconListItem:
+                text: "Deleted Notes"
+                IconLeftWidget:
+                    icon: "notebook"
+
+            OneLineIconListItem:
+                text: "Deleted Notes"
+                IconLeftWidget:
+                    icon: "notebook"
+
+        Widget:
+
+        # Bottom divider line (locked above delete button)
+        Widget:
+            size_hint_y: None
+            height: dp(2)
+            canvas.before:
+                Color:
+                    rgb: 0, 0, 0
+                Line:
+                    points: self.x, self.center_y, self.right, self.center_y
+                    width: 2
+
+        # Delete button row
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "center"
+            size_hint_y: None
+            height: dp(60)
+
+            MDRaisedButton:
+                text: "Delete"
+                md_bg_color: 183/255, 183/255, 183/255, 1
+                text_color: 0, 0, 0, 1
+                size_hint_x: None
+                width: dp(120)
+
+
+            
+<LowerLayout>:
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: dp(50)
+        padding: dp(10)
+        spacing: dp(10)
+
+        MDRaisedButton:
+            text: "Save"
+            size_hint_x: None
+            width: dp(100)
+            pos_hint: {"center_y": 0.5}
+            md_bg_color: 183/255, 183/255, 183/255, 1 
+            text_color: 0, 0, 0, 1
+
+        Widget:
+
+        MDIconButton:
+            icon: "dots-vertical"
+            pos_hint: {"center_y": 0.5}
+
+
+
+<LowerLayoutDotslist>:
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "top"
+        size_hint_y: None
+        height: dp(600)
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: dp(5)
+
+            OneLineIconListItem:
+                text: "Delete"
+                IconLeftWidget:
+                    icon: "delete"
+
+
+
+<ConditionalSummarizeAIForm>:
+    MDCard:
+        size_hint: None, None
+        size: dp(300), dp(180)
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        padding: dp(20)
+        spacing: dp(10)
+        radius: [12, 12, 12, 12]
+        elevation: 8
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: dp(15)
+
+            # Title
+            MDLabel:
+                text: "Summarizer AI"
+                halign: "center"
+                bold: True
+                size_hint_y: None
+                height: dp(30)
+
+            # Description
+            MDLabel:
+                text: "Would you like to summarize the comments?"
+                halign: "center"
+                size_hint_y: None
+                height: dp(30)
+
+            # Buttons row centered
+            AnchorLayout:
+                anchor_x: "center"
+                anchor_y: "center"
+                size_hint_y: None
+                height: dp(40)
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_x: None
+                    width: dp(220)  # total width for both buttons + spacing
+                    spacing: dp(20)
+
+                    MDRaisedButton:
+                        text: "Yes"
+                        size_hint_x: None
+                        width: dp(100)
+                        md_bg_color: 183/255, 183/255, 183/255, 1
+                        text_color: 0, 0, 0, 1
+
+                    Widget:
+
+                    MDRaisedButton:
+                        text: "Cancel"
+                        size_hint_x: None
+                        width: dp(100)
+                        md_bg_color: 183/255, 183/255, 183/255, 1
+                        text_color: 0, 0, 0, 1
+
+
+
+<SummarizerResultsForm>:
+    MDCard:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(10)
+        radius: [12, 12, 12, 12]
+        elevation: 8
+        size_hint: None, None
+        size: dp(360), dp(500)
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        # Title (centered at top)
+        MDLabel:
+            text: "Summarize Result"
+            halign: "center"
+            bold: True
+            theme_text_color: "Primary"
+            font_style: "H6"
+            size_hint_y: None
+            height: dp(40)
+            text_size: self.width, None
+
+        # Divider line
+        MDSeparator:
+            height: dp(1)
+
+        # Scrollable Content Section
+        ScrollView:
+            size_hint_y: None
+            height: dp(250)   # adjust as needed
+            do_scroll_x: False
+            
+            MDBoxLayout:
+                id: result_box
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+                padding: dp(5)
+            
+                # Result text
+                MDLabel:
+                    id: result_label
+                    text: "Your summarized text will appear here..."
+                    halign: "left"
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width - dp(20), None
+                    padding: dp(10), dp(10)
+
+        Widget:   # Spacer to push button to bottom
+
+        # Action button (centered at bottom)
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "center"
+            size_hint_y: None
+            height: dp(50)
+
+            MDRaisedButton:
+                text: "Close"
+                on_release: app.close_result_card()
+                md_bg_color: 183/255, 183/255, 183/255, 1
+                text_color: 0, 0, 0, 1
+
+
+
