@@ -1,7 +1,6 @@
 MainForm:
 
 
-
 <UpperLayout>:
     orientation: "horizontal"
     size_hint_y: None
@@ -417,13 +416,17 @@ MainForm:
 
             # Summarize button
             MDRaisedButton:
+                id: summarize_button
                 text: "Summarize"
                 size_hint_x: None
                 width: dp(120)
                 pos_hint: {"center_y": 0.5}
                 md_bg_color: 183/255, 183/255, 183/255, 1 
                 text_color: 0, 0, 0, 1
+                disabled: True
                 on_release: root.open_summarize_form()
+                # bind to ObjectProperty
+                on_kv_post: root.summarize_button = self
         
         # Input Notes
         BoxLayout:

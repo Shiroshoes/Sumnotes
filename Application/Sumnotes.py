@@ -30,6 +30,7 @@ from kivy.uix.textinput import TextInput
 
 
 
+
 width, height = Window.size
 print("Window width:", width)
 print("Window height:", height)
@@ -67,11 +68,9 @@ class MainSumNotesApp(MDApp):
     def get_line_color(self, is_active):
         return (1, 1, 1, 1) if is_active else (0, 0, 0, 1)
     
-    def toggle_summarizer(self, is_active):
-        if is_active:
-            print("Summarizer enabled")
-        else:
-            print("Summarizer disabled")
+    def toggle_summarizer(self, active: bool):
+        note_form = self.root.ids.screen_manager.get_screen("notes")
+        note_form.summarize_button.disabled = not active
 
 class UpperLayout(MDBoxLayout):
     def __init__(self, **kwargs):
@@ -173,6 +172,7 @@ class MainForm(MDScreen):
 
 
 class NoteForm(MDScreen):
+    summarize_button = ObjectProperty(None)
     dialog = None
 
     def open_summarize_form(self):
@@ -185,7 +185,6 @@ class NoteForm(MDScreen):
                 auto_dismiss=False,
             )
         self.dialog.open()
-
 
 class DeleteNoteForm(BoxLayout):
     pass
