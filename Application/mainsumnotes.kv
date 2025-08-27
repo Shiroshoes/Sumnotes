@@ -1,5 +1,5 @@
 MainForm:
-#:import Animation kivy.animation.Animation
+
 
 
 <UpperLayout>:
@@ -423,6 +423,7 @@ MainForm:
                 pos_hint: {"center_y": 0.5}
                 md_bg_color: 183/255, 183/255, 183/255, 1 
                 text_color: 0, 0, 0, 1
+                on_release: root.open_summarize_form()
         
         # Input Notes
         BoxLayout:
@@ -577,63 +578,55 @@ MainForm:
 
 
 
-<ConditionalSummarizeAIForm>:
-    MDCard:
-        size_hint: None, None
-        size: dp(300), dp(180)
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
-        padding: dp(20)
-        spacing: dp(10)
-        radius: [12, 12, 12, 12]
-        elevation: 8
+<ConditionalSummarizeAIForm@BoxLayout>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: self.minimum_height
+    padding: dp(10)
+    spacing: dp(15)
+
+    MDLabel:
+        text: "Summarizer AI"
+        halign: "center"
+        bold: True
+        size_hint_y: None
+        height: dp(70)
+
+    MDLabel:
+        text: "Would you like to summarize the comments?"
+        halign: "center"
+        size_hint_y: None
+        height: dp(80)
+
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+        size_hint_y: None
+        height: dp(60)
 
         BoxLayout:
-            orientation: "vertical"
-            spacing: dp(15)
+            orientation: "horizontal"
+            size_hint_x: None
+            width: dp(220)
+            spacing: dp(20)
 
-            # Title
-            MDLabel:
-                text: "Summarizer AI"
-                halign: "center"
-                bold: True
-                size_hint_y: None
-                height: dp(30)
+            MDFlatButton:
+                text: "Yes"
+                size_hint_x: None
+                width: dp(100)
+                md_bg_color: 183/255, 183/255, 183/255, 1
+                text_color: 0, 0, 0, 1
+                on_release: root.do_summarize()
+            
+            Widget:
 
-            # Description
-            MDLabel:
-                text: "Would you like to summarize the comments?"
-                halign: "center"
-                size_hint_y: None
-                height: dp(30)
-
-            # Buttons row centered
-            AnchorLayout:
-                anchor_x: "center"
-                anchor_y: "center"
-                size_hint_y: None
-                height: dp(40)
-
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_x: None
-                    width: dp(220)  # total width for both buttons + spacing
-                    spacing: dp(20)
-
-                    MDRaisedButton:
-                        text: "Yes"
-                        size_hint_x: None
-                        width: dp(100)
-                        md_bg_color: 183/255, 183/255, 183/255, 1
-                        text_color: 0, 0, 0, 1
-
-                    Widget:
-
-                    MDRaisedButton:
-                        text: "Cancel"
-                        size_hint_x: None
-                        width: dp(100)
-                        md_bg_color: 183/255, 183/255, 183/255, 1
-                        text_color: 0, 0, 0, 1
+            MDFlatButton:
+                text: "Cancel"
+                size_hint_x: None
+                width: dp(100)
+                md_bg_color: 183/255, 183/255, 183/255, 1
+                text_color: 0, 0, 0, 1
+                on_release: root.close_dialog()
 
 
 

@@ -25,6 +25,8 @@ from kivy.properties import DictProperty
 from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
+from kivymd.uix.dialog import MDDialog
+from kivy.uix.textinput import TextInput
 
 
 
@@ -45,7 +47,6 @@ class MainSumNotesApp(MDApp):
     def show_note_form(self):
         print("FAB clicked")
         self.root.ids.screen_manager.current = "notes"
-
 
     def toggle_theme(self, is_active):
         if is_active:
@@ -172,7 +173,18 @@ class MainForm(MDScreen):
 
 
 class NoteForm(MDScreen):
-    pass
+    dialog = None
+
+    def open_summarize_form(self):
+        if not self.dialog:
+            content = ConditionalSummarizeAIForm()
+            content.dialog_ref = self
+            self.dialog = MDDialog(
+                type="custom",
+                content_cls=content,
+                auto_dismiss=False,
+            )
+        self.dialog.open()
 
 
 class DeleteNoteForm(BoxLayout):
@@ -180,7 +192,18 @@ class DeleteNoteForm(BoxLayout):
 
 
 class ConditionalSummarizeAIForm(BoxLayout):
-    pass
+    dialog_ref = ObjectProperty(None)
+
+    def do_summarize(self):
+        print("Summarization started")
+        if self.dialog_ref.dialog:
+            self.dialog_ref.dialog.dismiss()
+            self.dialog_ref.dialog = None
+
+    def close_dialog(self):
+        if self.dialog_ref.dialog:
+            self.dialog_ref.dialog.dismiss()
+            self.dialog_ref.dialog = None
 
 
 class SummarizerResultsForm(BoxLayout):
