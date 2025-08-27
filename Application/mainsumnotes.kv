@@ -1,4 +1,5 @@
 MainForm:
+#:import Animation kivy.animation.Animation
 
 
 <UpperLayout>:
@@ -172,7 +173,7 @@ MainForm:
                         height: dp(2)
                         md_bg_color: 0, 0, 0, 1
 
-                    # -------- Scrollable Notes --------
+                    # Scrollable Notes
                     MDScrollView:
                         MDBoxLayout:
                             orientation: "vertical"
@@ -180,7 +181,7 @@ MainForm:
                             padding: dp(10)
                             adaptive_height: True
 
-                            # --------- Pinned Notes ---------
+                            # Pinned Notes
                             MDLabel:
                                 text: "Pinned"
                                 halign: "left"
@@ -225,13 +226,13 @@ MainForm:
                                         halign: "left"
                                         theme_text_color: "Secondary"
 
-                            # -------- Divider --------
+                            # Divider
                             MDBoxLayout:
                                 size_hint_y: None
                                 height: dp(2)
                                 md_bg_color: 0, 0, 0, 1
 
-                            # --------- Normal Notes ---------
+                            #  Normal Notes 
                             MDLabel:
                                 text: "Notes"
                                 halign: "left"
@@ -278,10 +279,10 @@ MainForm:
 
                 # +
                 MDFloatingActionButton:
+                    id: plus_button
                     icon: "plus"
-                    pos_hint: {"right": 0.95, "y": 0.05}  # bottom-right
-                    on_release:
-                        app.show_note_form()
+                    pos_hint: {"right": 0.95, "y": 0.05}
+                    on_release: root.ids.plus_menu.open_menu(self)
 
             NoteForm:
                 name: "notes"
@@ -317,6 +318,8 @@ MainForm:
                         icon_size: "25sp"
                         size_hint: None, None
                         size: dp(50), dp(50)
+                        on_release:
+                            nav_drawer.set_state("close");
 
                 # Divider line right below dots
                 Widget:
@@ -358,6 +361,8 @@ MainForm:
                 # Spacer to fill the rest of the phone
                 Widget:
                     size_hint_y: 1
+    PlusMenu:
+        id: plus_menu
 
 
 
@@ -554,6 +559,7 @@ MainForm:
         spacing: dp(10)
 
         MDRaisedButton:
+            id: save_button
             text: "Save"
             size_hint_x: None
             width: dp(100)
@@ -564,28 +570,10 @@ MainForm:
         Widget:
 
         MDIconButton:
+            id: dots_button
             icon: "dots-vertical"
             pos_hint: {"center_y": 0.5}
-
-
-
-<LowerLayoutDotslist>:
-    AnchorLayout:
-        anchor_x: "center"
-        anchor_y: "top"
-        size_hint_y: None
-        height: dp(600)
-
-        MDBoxLayout:
-            orientation: "vertical"
-            size_hint_y: None
-            height: self.minimum_height
-            spacing: dp(5)
-
-            OneLineIconListItem:
-                text: "Delete"
-                IconLeftWidget:
-                    icon: "delete"
+            on_release: root.open_menu(self)
 
 
 
