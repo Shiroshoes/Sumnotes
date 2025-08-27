@@ -1,16 +1,19 @@
 MainForm:
 
 
-<UpperLayout>
+<UpperLayout>:
     orientation: "horizontal"
+    size_hint_y: None
+    height: dp(70)
     padding: (10, 10, 10, 10)
     spacing: dp(10)
 
-    #menu button
+    # menu button
     MDIconButton:
-        id: settings_bin
+        id: menu_button
         icon: "dots-horizontal"
         icon_size: "25sp"
+        on_release: root.dispatch("on_menu_press")
         canvas.before:
             Color:
                 rgb: 183/255, 183/255, 183/255
@@ -19,81 +22,21 @@ MainForm:
                 pos: self.pos
                 radius: [9, 9, 9, 9]
 
-    #search bar
+    # search bar
     MDTextField:
         hint_text: "Search"
         mode: "rectangle"
         fill_color: 183/255, 183/255, 183/255, 1
 
-    #search button
+    # search button
     MDIconButton:
         icon: "magnify"
 
-    #logo
+    # logo
     Image:
         source: "sumnotes.png"
         size_hint: None, None
         size: dp(50), dp(50)
-
-
-
-<menuform>:
-    orientation: "vertical"
-    spacing: 0
-    padding: 0
-
-    # Top bar with dots
-    AnchorLayout:
-        id: top_bar
-        anchor_x: "right"
-        anchor_y: "top"
-        size_hint_y: None
-        height: dp(50)
-
-        MDIconButton:
-            id: settings_bin
-            icon: "dots-horizontal"
-            icon_size: "25sp"
-            size_hint: None, None
-            size: dp(50), dp(50)
-
-    # Divider line right below dots
-    Widget:
-        size_hint_y: None
-        height: dp(2)
-        canvas.before:
-            Color:
-                rgb: 0, 0, 0
-            Line:
-                points: self.x, self.center_y, self.right, self.center_y
-                width: 2
-
-
-    # List locked right below the line
-    MDBoxLayout:
-        orientation: "vertical"
-        size_hint_y: None
-        height: self.minimum_height
-        spacing: dp(5)
-
-        OneLineIconListItem:
-            text: "Notes"
-            IconLeftWidget:
-                icon: "notebook"
-
-        OneLineIconListItem:
-            text: "Delete"
-            IconLeftWidget:
-                icon: "delete"
-
-        OneLineIconListItem:
-            text: "Settings"
-            IconLeftWidget:
-                icon: "cog"
-
-    # Spacer to fill the rest of the phone
-    Widget:
-        size_hint_y: 1
 
 
 
@@ -104,7 +47,7 @@ MainForm:
 
     # Top-right cog button
     AnchorLayout:
-        anchor_x: "right"
+        anchor_x: "left"
         anchor_y: "top"
         size_hint_y: None
         height: dp(50)
@@ -114,6 +57,8 @@ MainForm:
             icon_size: "25sp"
             size_hint: None, None
             size: dp(50), dp(50)
+            on_release: app.root.ids.nav_drawer.set_state("close"); app.root.ids.screen_manager.current = "main"
+
 
     # Divider line right below the cog
     Widget:
@@ -205,177 +150,214 @@ MainForm:
 
 
 
-<MainForm>:
-    MDBoxLayout:
-        orientation: "vertical"
+<MainForm@MDScreen>:
+    MDNavigationLayout:
+        ScreenManager:
+            id: screen_manager
+            MDScreen:
+                name: "main"
+                BoxLayout:
+                    orientation: "vertical"
 
-        # -------- Top Bar --------
-        AnchorLayout:
-            anchor_x: "center"
-            anchor_y: "top"
-            size_hint_y: None
-            height: dp(70)
-            UpperLayout:
+                    AnchorLayout:
+                        anchor_x: "center"
+                        anchor_y: "top"
+                        size_hint_y: None
+                        height: dp(70)
+                        UpperLayout:
+                            on_menu_press: root.ids.nav_drawer.set_state("open")
 
-        # -------- Divider --------
-        MDBoxLayout:
-            size_hint_y: None
-            height: dp(2)
-            md_bg_color: 0, 0, 0, 1
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(2)
+                        md_bg_color: 0, 0, 0, 1
 
-        # -------- Scrollable Notes --------
-        MDScrollView:
-            MDBoxLayout:
-                orientation: "vertical"
-                spacing: dp(10)
-                padding: dp(10)
-                adaptive_height: True
-
-                # --------- Pinned Notes ---------
-                MDLabel:
-                    text: "Pinned"
-                    halign: "left"
-                    font_style: "H6"
-                    size_hint_y: None
-                    height: dp(40)
-
-                MDGridLayout:
-                    cols: 2
-                    spacing: dp(10)
-                    adaptive_height: True
-
-                    MDCard:
-                        orientation: "vertical"
-                        size_hint: None, None
-                        size: dp(170), dp(200)
-                        padding: dp(10)
-                        radius: [15, 15, 15, 15]
-                        md_bg_color: .85, .85, .85, 1
-                        on_release: app.show_note_detail("Pinned Note Example")
-
+                    # -------- Scrollable Notes --------
+                    MDScrollView:
                         MDBoxLayout:
-                            orientation: "horizontal"
-                            size_hint_y: None
-                            height: dp(30)
+                            orientation: "vertical"
+                            spacing: dp(10)
+                            padding: dp(10)
+                            adaptive_height: True
 
+                            # --------- Pinned Notes ---------
                             MDLabel:
-                                text: "Pinned Title"
-                                font_style: "Subtitle1"
+                                text: "Pinned"
                                 halign: "left"
+                                font_style: "H6"
+                                size_hint_y: None
+                                height: dp(40)
 
-                            MDIconButton:
-                                icon: "delete"
-                                theme_icon_color: "Custom"
-                                icon_color: 1, 0, 0, 1
-                                size_hint_x: None
-                                width: dp(40)
-                                opacity: 0
+                            MDGridLayout:
+                                cols: 2
+                                spacing: dp(10)
+                                adaptive_height: True
 
-                        MDLabel:
-                            text: "Pinned note content"
-                            halign: "left"
-                            theme_text_color: "Secondary"
+                                MDCard:
+                                    orientation: "vertical"
+                                    size_hint: None, None
+                                    size: dp(170), dp(200)
+                                    padding: dp(10)
+                                    radius: [15, 15, 15, 15]
+                                    md_bg_color: .85, .85, .85, 1
+                                    on_release: app.show_note_detail("Pinned Note Example")
 
-                # -------- Divider --------
-                MDBoxLayout:
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        size_hint_y: None
+                                        height: dp(30)
+
+                                        MDLabel:
+                                            text: "Pinned Title"
+                                            font_style: "Subtitle1"
+                                            halign: "left"
+
+                                        MDIconButton:
+                                            icon: "delete"
+                                            theme_icon_color: "Custom"
+                                            icon_color: 1, 0, 0, 1
+                                            size_hint_x: None
+                                            width: dp(40)
+                                            opacity: 0
+
+                                    MDLabel:
+                                        text: "Pinned note content"
+                                        halign: "left"
+                                        theme_text_color: "Secondary"
+
+                            # -------- Divider --------
+                            MDBoxLayout:
+                                size_hint_y: None
+                                height: dp(2)
+                                md_bg_color: 0, 0, 0, 1
+
+                            # --------- Normal Notes ---------
+                            MDLabel:
+                                text: "Notes"
+                                halign: "left"
+                                font_style: "H6"
+                                size_hint_y: None
+                                height: dp(40)
+
+                            MDGridLayout:
+                                cols: 2
+                                spacing: dp(10)
+                                adaptive_height: True
+
+                                MDCard:
+                                    orientation: "vertical"
+                                    size_hint: None, None
+                                    size: dp(170), dp(200)
+                                    padding: dp(10)
+                                    radius: [15, 15, 15, 15]
+                                    md_bg_color: .85, .85, .85, 1
+                                    on_release: app.show_note_detail("Normal Note Example")
+
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        size_hint_y: None
+                                        height: dp(30)
+
+                                        MDLabel:
+                                            text: "Normal Title"
+                                            font_style: "Subtitle1"
+                                            halign: "left"
+
+                                        MDIconButton:
+                                            icon: "delete"
+                                            theme_icon_color: "Custom"
+                                            icon_color: 1, 0, 0, 1
+                                            size_hint_x: None
+                                            width: dp(40)
+                                            opacity: 0
+
+                                    MDLabel:
+                                        text: "Normal note content"
+                                        halign: "left"
+                                        theme_text_color: "Secondary"
+
+                # +
+                MDFloatingActionButton:
+                    icon: "plus"
+                    pos_hint: {"right": 0.95, "y": 0.05}  # bottom-right
+                    on_release:
+                        app.show_note_form()
+
+            NoteForm:
+                name: "notes"
+
+            MDScreen:
+                name: "deleted"
+                DeleteNoteForm:
+                    nav_drawer: nav_drawer
+
+            MDScreen:
+                name: "settings"
+                Settingsform:
+                    nav_drawer: nav_drawer
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            BoxLayout:
+                orientation: "vertical"
+                spacing: 0
+                padding: 0
+
+                # Top bar with dots
+                AnchorLayout:
+                    id: top_bar
+                    anchor_x: "right"
+                    anchor_y: "top"
+                    size_hint_y: None
+                    height: dp(50)
+
+                    MDIconButton:
+                        id: settings_bin
+                        icon: "dots-horizontal"
+                        icon_size: "25sp"
+                        size_hint: None, None
+                        size: dp(50), dp(50)
+
+                # Divider line right below dots
+                Widget:
                     size_hint_y: None
                     height: dp(2)
-                    md_bg_color: 0, 0, 0, 1
+                    canvas.before:
+                        Color:
+                            rgb: 0, 0, 0
+                        Line:
+                            points: self.x, self.center_y, self.right, self.center_y
+                            width: 2
 
-                # --------- Normal Notes ---------
-                MDLabel:
-                    text: "Notes"
-                    halign: "left"
-                    font_style: "H6"
+                # List locked right below the line
+                MDBoxLayout:
+                    orientation: "vertical"
                     size_hint_y: None
-                    height: dp(40)
+                    height: self.minimum_height
+                    spacing: dp(5)
 
-                MDGridLayout:
-                    cols: 2
-                    spacing: dp(10)
-                    adaptive_height: True
+                    OneLineIconListItem:
+                        text: "Notes"
+                        on_release: nav_drawer.set_state("close"); app.root.ids.screen_manager.current = "main"
+                        IconLeftWidget:
+                            icon: "notebook"
 
-                    MDCard:
-                        orientation: "vertical"
-                        size_hint: None, None
-                        size: dp(170), dp(200)
-                        padding: dp(10)
-                        radius: [15, 15, 15, 15]
-                        md_bg_color: .85, .85, .85, 1
-                        on_release: app.show_note_detail("Normal Note Example")
+                    OneLineIconListItem:
+                        text: "Delete"
+                        on_release: nav_drawer.set_state("close"); app.root.ids.screen_manager.current = "deleted"
+                        IconLeftWidget:
+                            icon: "delete"
 
-                        MDBoxLayout:
-                            orientation: "horizontal"
-                            size_hint_y: None
-                            height: dp(30)
+                    OneLineIconListItem:
+                        text: "Settings"
+                        on_release: nav_drawer.set_state("close"); app.root.ids.screen_manager.current = "settings"
+                        IconLeftWidget:
+                            icon: "cog"
 
-                            MDLabel:
-                                text: "Normal Title"
-                                font_style: "Subtitle1"
-                                halign: "left"
 
-                            MDIconButton:
-                                icon: "delete"
-                                theme_icon_color: "Custom"
-                                icon_color: 1, 0, 0, 1
-                                size_hint_x: None
-                                width: dp(40)
-                                opacity: 0
-
-                        MDLabel:
-                            text: "Normal note content"
-                            halign: "left"
-                            theme_text_color: "Secondary"
-
-        # -------- Bottom Divider --------
-        Widget:
-            size_hint_y: None
-            height: dp(2)
-            canvas.before:
-                Color:
-                    rgb: 0, 0, 0
-                Line:
-                    points: self.x, self.center_y, self.right, self.center_y
-                    width: 1
-
-        # -------- Bottom Bar --------
-        AnchorLayout:
-            size_hint_y: None
-            height: dp(70)
-
-            BoxLayout:
-                orientation: "horizontal"
-                size_hint_x: 1
-                padding: dp(10)
-
-                # Left filler
+                # Spacer to fill the rest of the phone
                 Widget:
-
-                # Center "+"
-                MDRaisedButton:
-                    text: "+"
-                    font_size: "30sp"
-                    size_hint: None, None
-                    size: dp(60), dp(60)
-                    md_bg_color: 0, 0, 0, 1
-                    text_color: 1, 1, 1, 1
-                    pos_hint: {"center_x": 0.5} 
-                    on_release: app.toggle_new_note_form()
-
-                # Right filler
-                Widget:
-
-                # Far right menu button
-                MDIconButton:
-                    icon: "dots-vertical"
-                    theme_icon_color: "Custom"
-                    icon_color: 0, 0, 0, 1
-                    size_hint: None, None
-                    size: dp(50), dp(50)
-
-
-
-
+                    size_hint_y: 1
 
 
 
@@ -390,6 +372,7 @@ MainForm:
             height: dp(70)
             
             UpperLayout:
+                on_menu_press: app.root.ids.nav_drawer.set_state("open")
 
         # Line divider
         Widget:
@@ -414,7 +397,8 @@ MainForm:
                 icon: "chevron-left"
                 icon_size: "30sp"
                 theme_text_color: "Custom"
-                pos_hint: {"center_y": 0.5}  # aligns vertically
+                pos_hint: {"center_y": 0.5}
+                on_release: app.root.ids.screen_manager.current = "main"
                 # text_color: app.get_icon_color(theme_switch.active)
                 # on_release: app.go_back()
 
@@ -488,7 +472,8 @@ MainForm:
             height: dp(70)
             
             UpperLayout:
-    
+                on_menu_press: app.root.ids.nav_drawer.set_state("open")
+
         #Line divider
         Widget:
             size_hint_y: None

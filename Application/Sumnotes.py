@@ -17,6 +17,12 @@ from kivy.properties import ListProperty
 from kivy.animation import Animation
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.properties import ObjectProperty
+from kivy.properties import DictProperty
+from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 
 
 width, height = Window.size
@@ -27,6 +33,17 @@ Window.size = (360, 640)
 
 
 class MainSumNotesApp(MDApp):
+    fab_items = DictProperty()
+
+    def build(self):
+        self.theme_cls.primary_palette = "Gray"
+        return MainForm()
+
+    def show_note_form(self):
+        print("FAB clicked")
+        self.root.ids.screen_manager.current = "notes"
+
+
     def toggle_theme(self, is_active):
         if is_active:
             self.theme_cls.theme_style = "Dark"
@@ -61,10 +78,14 @@ class MainSumNotesApp(MDApp):
             form.opacity = 0
             form.disabled = True
 
-            
+class UpperLayout(MDBoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.register_event_type('on_menu_press')
 
-class UpperLayout(BoxLayout):
-    pass
+    def on_menu_press(self, *args):
+        """Default handler for the event (can be empty)."""
+        pass
 
 class LowerLayout(BoxLayout):
     pass
@@ -72,16 +93,14 @@ class LowerLayout(BoxLayout):
 class LowerLayoutDotslist(BoxLayout):
     pass
 
-class menuform(BoxLayout):
-    pass
-
 class Settingsform(BoxLayout):
     line_color = ListProperty([0, 0, 0, 1])
+    nav_drawer = ObjectProperty()
 
-class MainForm(BoxLayout):
+class MainForm(MDScreen):
     pass
 
-class NoteForm(BoxLayout):
+class NoteForm(MDScreen):
     pass
 
 class DeleteNoteForm(BoxLayout):
