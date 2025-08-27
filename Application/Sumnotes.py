@@ -23,6 +23,9 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import ObjectProperty
 from kivy.properties import DictProperty
 from kivymd.uix.button import MDFloatingActionButtonSpeedDial
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
+
 
 
 width, height = Window.size
@@ -69,15 +72,6 @@ class MainSumNotesApp(MDApp):
         else:
             print("Summarizer disabled")
 
-    def toggle_new_note_form(self):
-        form = self.root.ids.new_note_form
-        if form.opacity == 0:
-            form.opacity = 1
-            form.disabled = False
-        else:
-            form.opacity = 0
-            form.disabled = True
-
 class UpperLayout(MDBoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -87,29 +81,110 @@ class UpperLayout(MDBoxLayout):
         """Default handler for the event (can be empty)."""
         pass
 
-class LowerLayout(BoxLayout):
-    pass
 
-class LowerLayoutDotslist(BoxLayout):
-    pass
+class PlusMenu(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        menu_items = [
+            {
+                "viewclass": "OneLineIconListItem",
+                "text": "New Note",
+                "on_release": self.new_note,
+            },
+            {
+                "viewclass": "OneLineIconListItem",
+                "text": "New Pinned Note",
+                "on_release": self.new_pinned_note,
+            },
+        ]
+
+        self.menu = MDDropdownMenu(
+            caller=None,
+            items=menu_items,
+            width_mult=4,
+        )
+
+    def open_menu(self, caller):
+        self.menu.caller = caller
+        self.menu.open()
+
+    def new_note(self):
+        app = MDApp.get_running_app()
+        app.show_note_form()
+        self.menu.dismiss()
+
+    def new_pinned_note(self):
+        print("Pinned Note creation not implemented yet")
+        self.menu.dismiss()
+
+class LowerLayout(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        # dropdown menu items
+        menu_items = [
+            {
+                "viewclass": "OneLineIconListItem",
+                "text": "Delete",
+                "on_release": lambda x="Delete": self.menu_callback(x),
+            },
+            {
+                "viewclass": "OneLineIconListItem",
+                "text": "Share",
+                "on_release": lambda x="Share": self.menu_callback(x),
+            },
+            {
+                "viewclass": "OneLineIconListItem",
+                "text": "Settings",
+                "on_release": self.go_to_settings,
+            },
+        ]
+
+        self.menu = MDDropdownMenu(
+            caller=None,
+            items=menu_items,
+            width_mult=4,
+        )
+
+    def open_menu(self, caller):
+        self.menu.caller = caller
+        self.menu.open()
+
+    def menu_callback(self, text_item):
+        print(f"Selected: {text_item}")
+        self.menu.dismiss()
+
+    def go_to_settings(self):
+        app = MDApp.get_running_app()
+        app.root.ids.nav_drawer.set_state("close")
+        app.root.ids.screen_manager.current = "settings"
+        self.menu.dismiss()
+
 
 class Settingsform(BoxLayout):
     line_color = ListProperty([0, 0, 0, 1])
     nav_drawer = ObjectProperty()
 
+
 class MainForm(MDScreen):
     pass
+
 
 class NoteForm(MDScreen):
     pass
 
+
 class DeleteNoteForm(BoxLayout):
     pass
+
 
 class ConditionalSummarizeAIForm(BoxLayout):
     pass
 
+
 class SummarizerResultsForm(BoxLayout):
     pass
+
 
 MainSumNotesApp().run()
