@@ -1,8 +1,14 @@
-# SumNotes Mobile App
+
+<img width="566" height="626" alt="sumnotes" src="https://github.com/user-attachments/assets/bd4e74a7-9d81-4362-bad1-00cdad27eff7" />
+
+<p align='center'>
+  # SumNotes Mobile App
+</p>
 An academic project by BPSU DS student
 
 Group 5
 - Jeo-Criz Izzack E. Perdio
 - Rhommel M. Palermo
 - Rodrigo D. Salandanan
+
 - Ian Benedict S. Malit
