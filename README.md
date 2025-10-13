@@ -1,10 +1,10 @@
-
-
-
 <p align='center' flex-direction='column' font-weight='bold' font-size-30>
   <img height="200" alt="sumnotes" src="https://github.com/user-attachments/assets/bd4e74a7-9d81-4362-bad1-00cdad27eff7" />
   SumNotes Mobile App
 </p>
+
+---
+
 An academic project by BPSU DS student
 
 Group 5
