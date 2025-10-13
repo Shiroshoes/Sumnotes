@@ -4,6 +4,7 @@
 
 <h2 align='center'><b>SumNotes Mobile App</b></h2>
 
+
 ### An academic project by BPSU DS student
 
 ### Group 5
