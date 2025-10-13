@@ -1,4 +1,8 @@
-# Sumnotes
-An academic project by BPSU student
+# SumNotes Mobile App
+An academic project by BPSU DS student
 
-Jeo
+Group 5
+- Jeo-Criz Izzack E. Perdio
+- Rhommel M. Palermo
+- Rodrigo D. Salandanan
+- Ian Benedict S. Malit
